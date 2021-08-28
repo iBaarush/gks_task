@@ -2,30 +2,32 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:async';
 
-Map reqDat = {
-  "category": "movies",
-  "language": "kannada",
-  "genre": "all",
-  "sort": "voting"
-};
+class network {
+  Map reqDat = {
+    "category": "movies",
+    "language": "kannada",
+    "genre": "all",
+    "sort": "voting"
+  };
 
-Future<Map> getData() async {
-  Uri url = Uri.parse('https://hoblist.com/movieList');
-  String body = json.encode(reqDat);
+  Future<Map> getData() async {
+    Uri url = Uri.parse('https://hoblist.com/movieList');
+    String body = json.encode(reqDat);
 
-  var response = await http
-      .post(url, body: body, headers: {"Content-Type": "application/json"});
-  print(response.statusCode);
-  print(response.body);
-  print(response.body);
-  print(json.decode(response.body));
+    http.Response response = await http
+        .post(url, body: body, headers: {"Content-Type": "application/json"});
+    print(response.statusCode);
+    print(response.body);
+    print(response.body);
+    print(json.decode(response.body));
 
-  return json.decode(response.body);
+    return json.decode(response.body);
+  }
 }
 
-void main() {
-  getData();
-}
+// void main() {
+//   getData();
+// }
 
 Map sampleJsonData = {
   "result": [
