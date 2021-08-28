@@ -12,6 +12,7 @@ class MovieList extends StatefulWidget {
 }
 
 class _MovieListState extends State<MovieList> {
+  var liOfActualData;
   var _isLoading = true;
   int vote_counter = 0;
   List<int> votesFreq = [];
@@ -19,37 +20,20 @@ class _MovieListState extends State<MovieList> {
   @override
   void initState() {
     super.initState();
-    // data = fetch();
     method();
-    // print(data);
-    // print(data.runtimeType);
-    // votesFreq = data['result'];
-    // data.then((value) {
-    //   setState(() {
-    //     votesFreq = value;
-    //   });
-    // });
-    // print(votesFreq);
-    // print("+__++)_____");
-    //  print(data[0].runtimeType);
   }
 
   void method() async {
     network().getData().then((Map s) => setState(() {
-          var liOfActualData = s['result'];
+          liOfActualData = s['result'];
           var lenOfLiOfActualData = liOfActualData.length;
           votesFreq = List.filled(lenOfLiOfActualData, 0);
           setState(() {
             _isLoading = false;
           });
         }));
-    // print('after future intitstate');
-    // print(votesFreq);
-
-    // print(data);
-    // print(data['result'].runtimeType);
-    // List<Map<dynamic, dynamic>> liOfMovieObjects = data["result"];
-    // print(liOfMovieObjects);
+    print('after future intitstate');
+    print(votesFreq);
   }
 
   Future fetch() async {
@@ -59,16 +43,7 @@ class _MovieListState extends State<MovieList> {
     return local_data;
   }
 
-  //List<int> votesFreq = [];
-
   Widget createListView(List data, BuildContext context) {
-    // print(data);
-    // var listOfActualData = data;
-    // var lenOfLiOfActualData = listOfActualData.length;
-
-    // votesFreq = List.filled(lenOfLiOfActualData, 0);
-
-    print(votesFreq);
     return ListView.builder(
       itemCount: data.length,
       itemBuilder: (context, int index) {
@@ -203,9 +178,6 @@ class _MovieListState extends State<MovieList> {
     );
   }
 
-// _isLoading
-//           ? CircularProgressIndicator()
-//           :
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -224,20 +196,10 @@ class _MovieListState extends State<MovieList> {
                 ),
               ),
             ),
-            Container(
-              height: MediaQuery.of(context).size.height - 60,
-              child: FutureBuilder(
-                future: fetch(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  // print(snapshot.data['result'][0]['title']);
-                  // if (snapshot.data['result'] != null) {
-                  //   setState(() {
-                  //     _isLoading = false;
-                  //   });
-                  // }
-                  return createListView(snapshot.data['result'], context);
-                },
-              ),
+            Expanded(
+              child: _isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : createListView(liOfActualData, context),
             ),
           ],
         ),
